@@ -36,7 +36,7 @@ resource "aws_internet_gateway" "gw" {
   }
 }
 
-resource "aws_route_table" "rt" {
+resource "aws_route_table" "rt_public" {
   vpc_id = aws_vpc.vpc.id
 
   route {
@@ -45,12 +45,26 @@ resource "aws_route_table" "rt" {
   }
 
   tags = {
-    Name = "${var.prefix_name} Route Table"
+    Name = "${var.prefix_name} Public Route Table"
   }
 }
 
 resource "aws_route_table_association" "public_subnet_asso" {
   count          = length(var.public_subnets_cidrs)
   subnet_id      = element(aws_subnet.public_subnets[*].id, count.index)
-  route_table_id = aws_route_table.rt.id
+  route_table_id = aws_route_table.rt_public.id
+}
+
+resource "aws_route_table" "rt_private" {
+  vpc_id = aws_vpc.vpc.id
+
+  tags = {
+    Name = "${var.prefix_name} Private Route Table"
+  }
+}
+
+resource "aws_route_table_association" "private_subnet_asso" {
+  count          = length(var.private_subnets_cidrs)
+  subnet_id      = element(aws_subnet.private_subnets[*].id, count.index)
+  route_table_id = aws_route_table.rt_private.id
 }
