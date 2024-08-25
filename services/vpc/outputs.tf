@@ -12,3 +12,8 @@ output "private_subnet_ids" {
   value       = [for subnet in aws_subnet.private_subnets : subnet.id]
   description = "IDs of the Private Subnets"
 }
+
+output "azs" {
+  value       = var.azs
+  description = "Availability Zones"
+}
