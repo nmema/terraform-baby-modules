@@ -34,3 +34,8 @@ variable "prefix_name" {
   description = "Prefix used for naming the resources"
   default     = "Terraform"
 }
+
+variable "enable_nat_gateway" {
+  type    = bool
+  default = false
+}
